@@ -1,0 +1,95 @@
+; {{ ansible_managed }}
+[Global]
+save password = {{ afp_save_password }}
+{% if afp_admin_group is defined %}
+admin group = {{ afp_admin_group }}
+{% endif %}
+log file = {{ afp_log_file }}
+log level = {{ afp_log_level }}
+log level = {{ afp_log_level }}:{{ afp_log_level_type }}
+{% if afp_fqdn is defined %}
+fqdn = {{ afp_fqdn }}
+{% endif %}
+{% set afp_uam_list = [] %}
+{% if afp_uam_guest %}{{ afp_uam_list.append("uams_guest.so") }}{% endif %}
+{% if afp_uam_clear_text %}{{ afp_uam_list.append("uams_clrtxt.so") }}{% endif %}
+{% if afp_uam_randum %}{{ afp_uam_list.append("uams_randum.so") }}{% endif %}
+{% if afp_uam_dhx %}{{ afp_uam_list.append("uams_dhx.so") }}{% endif %}
+{% if afp_uam_dhx2 %}{{ afp_uam_list.append("uams_dhx2.so") }}{% endif %}
+{% if afp_uam_k5 %}{{ afp_uam_list.append("uam_gss.so") }}{% endif %}
+uam list = {{ afp_uam_list | join(' ') }}
+{% if afp_kerberos is defined %}
+k5 keytab = {{ afp_kerberos.k5_keytab }}
+k5 service = {{ afp_kerberos.k5_service }}
+k5 realm = {{ afp_kerberos.k5_realm }}
+{% endif %}
+spotlight = {{ afp_spotlight }}
+{% if afp_ldap is defined %}
+ldap auth method = {{ afp_ldap.ldap_auth_method }}
+ldap auth dn = {{ afp_ldap.ldap_auth_dn }}
+{% if afp_ldap.ldap_auth_pw is defined %}
+ldap auth pw = {{ afp_ldap.ldap_auth_pw }}
+{% endif %}
+ldap server = {{ afp_ldap.ldap_server }}
+{% for base in afp_ldap.ldap_userbase %}
+ldap userbase = {{ base }}
+{% endfor %}
+{% if afp_ldap.ldap_userscope is defined %}
+ldap userscope = {{ afp_ldap.ldap_userscope }}
+{% endif %}
+{% if afp_ldap.ldap_user_filter is defined %}
+ldap user filter = {{ afp_ldap.ldap_user_filter }}
+{% endif %}
+ldap name attr = {{ afp_ldap.ldap_name_attr }}
+{% for base in afp_ldap.ldap_groupbase %}
+ldap groupbase = {{ base }}
+{% endfor %}
+{% if afp_ldap.ldap_group_scope is defined %}
+ldap groupscope = {{ afp_ldap.ldap_group_scope }}
+{% endif %}
+{% if afp_ldap.ldap_group_filter is defined %}
+ldap group filter = {{ afp_ldap.ldap_group_filter }}
+{% endif %}
+ldap group attr = {{ afp_ldap.ldap_group_attr }}
+{% if afp_ldap.ldap_uuid_attr is defined %}
+ldap uuid attr = {{ afp_ldap.ldap_uuid_attr }}
+{% endif %}
+{% if afp_ldap.ldap_uuid_encoding is defined %}
+ldap uuid encoding = {{ afp_ldap.ldap_uuid_encoding }}
+{% endif %}
+{% if afp_ldap.map_acls is defined %}
+map acls = {{ afp_ldap.map_acls }}
+{% endif %}
+{% endif %}
+
+{% for mount in afp_mounts %}
+[{{ mount.title }}]
+{% if mount.path is defined %}
+path = {{ mount.path }}
+{% endif %}
+{% if mount.dir_perm is defined %}
+directory perm = {{ mount.dir_perm }}
+{% endif %}
+{% if mount.file_perm is defined %}
+file perm = {{ mount.file_perm }}
+{% endif %}
+{% if mount.time_machine is defined %}
+time machine = {{ mount.time_machine }}
+{% endif %}
+{% if mount.valid_users is defined %}
+valid users = {{ mount.valid_users | join(' ') }}
+{% endif %}
+{% if mount.rw_list is defined %}
+rwlist = {{ mount.rw_list | join(' ') }}
+{% endif %}
+{% if mount.cnid_scheme is defined %}
+cnid scheme = {{ mount.cnid_scheme }}
+{% endif %}
+{% if mount.basedir_regex is defined %}
+basedir regex = {{ mount.basedir_regex }}
+{% endif %}
+{% if mount.vol_size_limit is defined %}
+vol size limit = {{ mount.vol_size_limit }}
+{% endif %}
+
+{% endfor %}

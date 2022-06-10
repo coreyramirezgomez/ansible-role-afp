@@ -1,0 +1,13 @@
+---
+# handlers file for ansible-role-afp
+- name: ansible-role-afp/handlers/main.yml - Enable Netatalk
+  service:
+   name: netatalk
+   state: started
+   enabled: yes
+  listen: "enable_netatalk"
+- name: ansible-role-afp/handlers/main.yml - Restart Netatalk
+  service:
+   name: netatalk
+   state: restarted
+  listen: "restart_netatalk"

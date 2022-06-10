@@ -1,0 +1,15 @@
+---
+# tasks file for ansible-role-afp
+- name: ansible-role-afp/tasks/main.yml - Install Netatalk
+  package:
+    name: netatalk
+    state: present
+  notify: "enable_netatalk"
+- name: ansible-role-afp/tasks/main.yml - Deploy afp.conf Template
+  template:
+    src: "afp.conf.j2"
+    dest: "/etc/netatalk/afp.conf"
+    owner: "root"
+    group: "root"
+    mode: 0750
+  notify: "restart_netatalk"
