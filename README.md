@@ -73,7 +73,7 @@ Coming soon...for now see defaults/main.yml
 
     - hosts: afp_hosts
       roles:
-        - role: coreyramirezgomez.afp
+        - role: crg.afp
           afp_mounts:
             - title: "AFP Share"
               path: "/mnt/afp_share"
